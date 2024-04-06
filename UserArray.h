@@ -48,6 +48,13 @@ public:
 		users_count_ = 0;
 	}
 
+	T& operator[](int i)
+	{
+		if (i >= 0 and i <= users_count_)
+			return users_[i];
+		
+	}
+
 	
 	//функция отражения информации по всем пользователям в массве
 	void print()

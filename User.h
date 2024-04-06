@@ -25,7 +25,7 @@ class User
         string get_username() const;
         string get_pass() const;
 
-    private:
+    
         string username_;    //переменная для логина пользователя
         string password_;    //переменная для пароля пользователя
 
