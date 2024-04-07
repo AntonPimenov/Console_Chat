@@ -15,24 +15,26 @@ void Chat::set_chat_name(string new_name_chat)
 
 void Chat::menu()
 {
-    cout << "---" << chat_name_ << "---" << endl;
-    cout << "Авторизация: \n" << endl;
-
+    cout << "---==" << chat_name_ << "==---" << endl << endl;
+    //cout << "Для авторизации: \n" << endl;
+    unsigned short punkt = 0;
     User* current_user = Chat::authorization();
     
-    unsigned short punkt = 0;
+
     if (current_user)
     {
-        unsigned input;
-        while(punkt != 4)
+        
+        while(punkt != 5)
         {
             cout << "Выберите, что надо сделать: \n";
             cout << "1 - просмотр списка активных пользователей\n";
             cout << "2 - написать конкретному пользователю\n";
             cout << "3 - написать всем\n";
-            cout << "4 - выход\n";
-            cin >> input;
-            switch (input)
+            cout << "4 - регистрация нового пользователя\n";
+            cout << "5 - выход\n\n";
+            cin >> punkt;
+            
+            switch (punkt)
             {
             case 1:
                 Chat::show_users();
@@ -44,13 +46,17 @@ void Chat::menu()
                 Chat::send_message_all(current_user);
                 break;
             case 4:
+                Chat::registration();
                 break;        
-            default:
-                cout << "не верный пункт меню!\n"; 
+            case 5: 
+                cout << "Выход из чата!";
+                break;
+           
             }
         } 
         
     }
+    cout << "Выход из чата.\n\n";
 }
 
 User* Chat::authorization()
@@ -60,8 +66,11 @@ User* Chat::authorization()
     while (input != "q")
     {
         cout << "---АВТОРИЗАЦИЯ---\n\n";
-        cout << "Введите логин: \n";
+        cout << "Введите логин или введите q для выхода: \n";
+        cin >> input;
+        if (input == "q") return 0; 
         //проверка наличие пользавателя в базе
+
         temp = user_array_.getUserByName(input);
         if (temp)
         {
@@ -72,14 +81,19 @@ User* Chat::authorization()
                 if (temp->password_ == input)
                 {
                     cout << "Авторизация успешна!\n";
+                    return temp;
                 }
                 cout << "Пароль неверный, осталось " << 2 - i << " попыток.\n";
             }
             cout << "Пароль неверный!\n";
+            return 0;
         }
         //если не прошли авторизацию, предлогаем зарегистрироваться
         cout << "Такого пользователя нет!\n";
-        Chat::registration();
+        cout << "Для регистрации введите 'yes', для выхода любую клавишу\n";
+        cin >> input;
+        if (input == "yes") Chat::registration();
+        else return 0;
     }
     return 0;
 }
@@ -87,17 +101,19 @@ User* Chat::authorization()
 void Chat::registration()
 {
     cout << "---Регистрация---\n\n";
-    cout << "---Для выхода введите q---\n";
+    //
     string name, password; 
-    do
+    while (name != "q")
     {
         cout << "Придумайте логин: \n";
+        //cout << "---Для выхода введите q---\n";
         cin >> name;
         if (user_array_.getUserByName(name))
         {
             cout << "Такой пользователь есть!\n";
         }
-    } while (name != "q");
+        else break;
+    } 
     cout << "Придумайте пароль: \n";
     cin >> password;
     User* new_user = new User(name, password);
