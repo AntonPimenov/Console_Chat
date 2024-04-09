@@ -56,7 +56,7 @@ void Chat::menu()
         } 
         
     }
-    cout << "Выход из чата.\n\n";
+    
 }
 
 User* Chat::authorization()
